@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Cart</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .total-box {
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: right;
+        }
+        .btn-checkout {
+            background-color: green;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 1.2em;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Your Shopping Cart</h1>
+<a href="/retail/home">← Continue Shopping</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${cartItems}">
+        <td th:text="${entry.key.name}">Tomato</td>
+        <td th:text="'₹' + ${entry.key.price}">₹40</td>
+        <td th:text="${entry.value}">2</td>
+        <td th:text="'₹' + ${entry.key.price * entry.value}">₹80</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="total-box">
+    Grand Total: <span th:text="'₹' + ${total}">₹0.0</span>
+    <br><br>
+    <a href="/retail/checkout" class="btn-checkout">Proceed to Checkout</a>
+</div>
+
+</body>
+</html>

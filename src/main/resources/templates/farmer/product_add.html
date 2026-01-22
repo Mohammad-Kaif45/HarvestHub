@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Product</title>
+</head>
+<body>
+<h2>Add New Crop</h2>
+
+<form action="/farmer/add" method="post" th:object="${product}">
+    <label>Crop Name:</label>
+    <input type="text" th:field="*{name}" placeholder="e.g. Potato" required><br><br>
+
+    <label>Description:</label>
+    <input type="text" th:field="*{description}" placeholder="e.g. Fresh organic"><br><br>
+
+    <label>Price (per kg):</label>
+    <input type="number" th:field="*{price}" required><br><br>
+
+    <label>Stock (kg):</label>
+    <input type="number" th:field="*{stock}" required><br><br>
+
+    <label>Sell To:</label>
+    <select th:field="*{listingType}">
+        <option value="RETAIL">Retail Customers (Higher Price)</option>
+        <option value="WHOLESALE">Wholesale Markets (Bulk)</option>
+    </select><br><br>
+
+    <button type="submit">List Product</button>
+</form>
+
+<a href="/farmer/dashboard">Back to Dashboard</a>
+</body>
+</html>

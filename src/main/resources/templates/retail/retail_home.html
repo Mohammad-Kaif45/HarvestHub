@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fresh Store</title>
+    <style>
+        /* Simple Grid Layout for Product Cards */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        .price { color: green; font-weight: bold; font-size: 1.2em; }
+        .btn-buy {
+            background-color: #ff9800;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none; /* Removes underline from link */
+            cursor: pointer;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn-buy:hover { background-color: #e68900; }
+
+        .btn-cart {
+            float: right;
+            margin-top: -40px;
+            margin-right: 80px;
+            background: #007bff;
+            color: white;
+            padding: 5px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .btn-cart:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div style="padding: 20px; background-color: #f8f9fa; border-bottom: 1px solid #ddd;">
+    <h1>HarvestHub Retail</h1>
+    <p>Welcome, <span th:text="${username}">User</span>!</p>
+
+    <a href="/retail/cart" class="btn-cart">View Cart 🛒</a>
+
+    <a href="/logout" style="float: right; margin-top: -40px; color: red;">Logout</a>
+</div>
+
+<div class="grid-container">
+    <div class="card" th:each="prod : ${products}">
+        <img src="https://via.placeholder.com/150?text=Veggie" alt="Veggie" style="border-radius: 8px;">
+
+        <h3 th:text="${prod.name}">Tomato</h3>
+        <p th:text="${prod.description}">Fresh and organic</p>
+        <p class="price" th:text="'₹' + ${prod.price} + ' / kg'">₹40 / kg</p>
+
+        <p style="font-size: 0.8em; color: gray;">
+            Available: <span th:text="${prod.stock}">50</span> kg
+        </p>
+
+        <a th:href="@{/retail/add-to-cart/{id}(id=${prod.id})}" class="btn-buy">Add to Cart</a>
+    </div>
+</div>
+
+</body>
+</html>

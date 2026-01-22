@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Farmer Dashboard</title>
+    <style>
+        table, th, td { border: 1px solid black; border-collapse: collapse; padding: 8px; }
+    </style>
+</head>
+<body>
+<h1>Welcome, <span th:text="${farmerName}">Farmer</span>!</h1>
+
+<a href="/farmer/add">
+    <button style="background-color: green; color: white; padding: 10px;">+ Add New Crop</button>
+</a>
+<a href="/logout">Logout</a>
+
+<h3>Your Listed Crops:</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Type</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="prod : ${products}">
+        <td th:text="${prod.name}">Onion</td>
+        <td th:text="'₹' + ${prod.price}">₹50</td>
+        <td th:text="${prod.stock} + ' kg'">100 kg</td>
+        <td th:text="${prod.listingType}">RETAIL</td>
+        <td>
+            <button>Edit</button>
+            <button style="color:red">Delete</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
