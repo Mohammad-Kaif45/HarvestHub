@@ -2,17 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Bulk Cart</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .navbar-wholesale { background-color: #004d40; }
+    </style>
 </head>
 <body>
-<h1>Your Bulk Cart</h1>
-<ul>
-    <li th:each="entry : ${cartItems}">
-        <span th:text="${entry.key.name}">Wheat</span> -
-        Qty: <span th:text="${entry.value}">10</span>
-    </li>
-</ul>
-<h3>Total: ₹<span th:text="${total}">100</span></h3>
 
-<a href="/wholesale/checkout">Confirm Bulk Order</a>
+<nav class="navbar navbar-wholesale">
+    <div class="logo">
+        <h1><i class="fas fa-dolly"></i> Bulk Order Cart</h1>
+    </div>
+    <div class="nav-links">
+        <a href="/wholesale/home">Back to Market</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div th:if="${param.error}" style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ffcdd2;">
+        <i class="fas fa-exclamation-circle"></i> Error: Not enough bulk stock available.
+    </div>
+
+    <div th:if="${cartItems.isEmpty()}" style="text-align: center; padding: 50px;">
+        <i class="fas fa-box-open" style="font-size: 4em; color: #ddd;"></i>
+        <h3 style="color: #666;">Bulk cart is empty</h3>
+        <a href="/wholesale/home" class="btn" style="background-color: #004d40; color: white;">View Commodities</a>
+    </div>
+
+    <div th:if="${!cartItems.isEmpty()}">
+        <table class="styled-table">
+            <thead style="background-color: #004d40;"> <tr>
+                <th>Commodity</th>
+                <th>Wholesale Price</th>
+                <th>Quantity (kg)</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${cartItems}">
+                <td><b th:text="${entry.key.name}">Wheat</b></td>
+                <td>₹<span th:text="${entry.key.price}">18.0</span></td>
+                <td><span th:text="${entry.value}">100</span> kg</td>
+                <td style="font-weight: bold;">₹<span th:text="${entry.key.price * entry.value}">1800.0</span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div style="text-align: right; margin-top: 30px;">
+            <h2 style="margin-bottom: 20px;">Estimated Total: <span style="color: #00796b;">₹<span th:text="${total}">100</span></span></h2>
+            <a href="/wholesale/checkout" class="btn" style="background-color: #004d40; color: white; padding: 15px 30px; font-size: 1.2em;">
+                Confirm Bulk Purchase <i class="fas fa-check-double"></i>
+            </a>
+        </div>
+    </div>
+
+</div>
+
 </body>
 </html>

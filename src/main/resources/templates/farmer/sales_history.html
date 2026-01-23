@@ -1,50 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>My Sales</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #4CAF50; color: white; }
-    </style>
+    <title>My Sales Reports</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-<a href="/farmer/dashboard">← Back to Dashboard</a>
-<h1>My Sales Reports</h1>
+<nav class="navbar">
+    <div class="logo">
+        <h1><i class="fas fa-chart-line"></i> Sales History</h1>
+    </div>
+    <div class="nav-links">
+        <a href="/farmer/dashboard"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
 
-<table>
-    <thead>
-    <tr>
-        <th>Order ID</th>
-        <th>Date</th>
-        <th>Customer Name</th>
-        <th>Items Sold</th>
-        <th>Total Value</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="order : ${orders}">
-        <td th:text="'#' + ${order.id}">#101</td>
-        <td th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}">12-01-2026</td>
+<div class="container">
+    <h2>Transactions Log</h2>
 
-        <td th:text="${order.user.fullName}">Priya Sharma</td>
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>Order #</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Items Sold</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td style="color: #666;">#<span th:text="${order.id}">101</span></td>
+            <td th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}">12-01-2026</td>
 
-        <td>
-            <ul style="margin: 0; padding-left: 20px;">
-                <li th:each="item : ${order.items}"
-                    th:if="${item.product.farmer.id} == ${order.items[0].product.farmer.id}">
-                    <span th:text="${item.product.name}">Tomato</span>
-                    (<span th:text="${item.quantity}">2</span> kg)
-                </li>
-            </ul>
-        </td>
+            <td>
+                <i class="fas fa-user-circle" style="color: var(--primary-blue);"></i>
+                <span th:text="${order.user.fullName}">Name</span>
+            </td>
 
-        <td th:text="'₹' + ${order.totalAmount}">₹500</td>
-    </tr>
-    </tbody>
-</table>
+            <td>
+                <ul style="margin: 0; padding-left: 20px; font-size: 0.9em; color: #444;">
+                    <li th:each="item : ${order.items}"
+                        th:if="${item.product.farmer.id} == ${order.items[0].product.farmer.id}">
+                        <span th:text="${item.product.name}">Crop</span>
+                        - <b><span th:text="${item.quantity}">2</span> kg</b>
+                    </li>
+                </ul>
+            </td>
+
+            <td style="font-weight: bold; color: var(--accent-green);">₹<span th:text="${order.totalAmount}">500</span></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${orders.isEmpty()}" style="text-align: center; margin-top: 50px; color: #888;">
+        <p>No sales recorded yet.</p>
+    </div>
+</div>
 
 </body>
 </html>

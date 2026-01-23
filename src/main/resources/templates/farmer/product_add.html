@@ -1,33 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add Product</title>
+    <title>Add New Crop</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Small tweak to make the form look like a card */
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto; /* Center it */
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            outline: none;
+        }
+    </style>
 </head>
 <body>
-<h2>Add New Crop</h2>
 
-<form action="/farmer/add" method="post" th:object="${product}">
-    <label>Crop Name:</label>
-    <input type="text" th:field="*{name}" placeholder="e.g. Potato" required><br><br>
+<nav class="navbar">
+    <div class="logo">
+        <h1><i class="fas fa-tractor"></i> Farmer Portal</h1>
+    </div>
+    <div class="nav-links">
+        <a href="/farmer/dashboard">Back to Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
 
-    <label>Description:</label>
-    <input type="text" th:field="*{description}" placeholder="e.g. Fresh organic"><br><br>
+<div class="container">
+    <h2 style="text-align: center; color: var(--primary-blue); margin-bottom: 25px;">Add a New Crop</h2>
 
-    <label>Price (per kg):</label>
-    <input type="number" th:field="*{price}" required><br><br>
+    <div class="form-card">
+        <form action="/farmer/save" method="post" th:object="${product}">
 
-    <label>Stock (kg):</label>
-    <input type="number" th:field="*{stock}" required><br><br>
+            <div class="form-group">
+                <label>Crop Name</label>
+                <input type="text" th:field="*{name}" class="form-control" placeholder="e.g. Potato, Wheat" required>
+            </div>
 
-    <label>Sell To:</label>
-    <select th:field="*{listingType}">
-        <option value="RETAIL">Retail Customers (Higher Price)</option>
-        <option value="WHOLESALE">Wholesale Markets (Bulk)</option>
-    </select><br><br>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea th:field="*{description}" class="form-control" placeholder="Short description..." rows="3"></textarea>
+            </div>
 
-    <button type="submit">List Product</button>
-</form>
+            <div class="form-group">
+                <label>Price (₹ per kg)</label>
+                <input type="number" step="0.01" th:field="*{price}" class="form-control" placeholder="e.g. 40.00" required>
+            </div>
 
-<a href="/farmer/dashboard">Back to Dashboard</a>
+            <div class="form-group">
+                <label>Available Stock (kg)</label>
+                <input type="number" th:field="*{stock}" class="form-control" placeholder="e.g. 100" required>
+            </div>
+
+            <div class="form-group">
+                <label>Listing Type</label>
+                <select th:field="*{listingType}" class="form-control">
+                    <option value="RETAIL">Retail (For Normal Customers)</option>
+                    <option value="WHOLESALE">Wholesale (Bulk for Big Buyers)</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    <i class="fas fa-save"></i> Save Crop
+                </button>
+
+                <a href="/farmer/dashboard" class="btn" style="background: #ddd; color: #333; text-align: center; flex: 1;">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
 </body>
 </html>

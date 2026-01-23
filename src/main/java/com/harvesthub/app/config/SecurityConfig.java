@@ -1,5 +1,9 @@
 package com.harvesthub.app.config;
-
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+// Change the imports at the top
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // Import this
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.harvesthub.app.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +22,14 @@ public class SecurityConfig {
         this.customUserDetailsService = customUserDetailsService;
     }
 
+
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // Use Strong Hashing
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -25,7 +37,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/login", "/register", "/register/save", "/style.css", "/css/**", "/images/**").permitAll()
                         .requestMatchers("/farmer/**").hasRole("FARMER")
                         .requestMatchers("/retail/**").hasRole("RETAIL")
                         .requestMatchers("/wholesale/**").hasRole("WHOLESALE")

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign Up - HarvestHub</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, var(--accent-green), var(--primary-blue));
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px; /* Slightly wider for form */
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #444;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            box-sizing: border-box;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-card">
+    <h2 style="color: var(--accent-green); margin-bottom: 5px;">
+        <i class="fas fa-seedling"></i> Join HarvestHub
+    </h2>
+    <p style="color: #666; margin-bottom: 25px;">Create your account today.</p>
+
+    <form th:action="@{/register/save}" th:object="${user}" method="post">
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" th:field="*{fullName}" class="form-control" placeholder="e.g. Rahul Verma" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" th:field="*{email}" class="form-control" placeholder="name@example.com" required>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" th:field="*{password}" class="form-control" placeholder="******" required>
+        </div>
+
+        <div class="form-group">
+            <label>I am a:</label>
+            <select th:field="*{role}" class="form-control">
+                <option value="RETAIL">Customer (Buy Vegetables)</option>
+                <option value="FARMER">Farmer (Sell Crops)</option>
+                <option value="WHOLESALE">Wholesale Buyer (Bulk Purchase)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; border-radius: 25px; margin-top: 10px;">
+            Create Account
+        </button>
+    </form>
+
+    <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
+        Already have an account? <a href="/login" style="color: var(--accent-green); font-weight: bold; text-decoration: none;">Login here</a>
+    </p>
+</div>
+
+</body>
+</html>

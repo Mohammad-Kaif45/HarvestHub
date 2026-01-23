@@ -2,42 +2,66 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Wholesale Market</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .bulk-card {
-            border: 2px solid #004d40;
-            background-color: #e0f2f1; /* Light Teal for Wholesale */
-            padding: 20px;
-            margin: 10px;
-            display: inline-block;
-            width: 250px;
-            text-align: center;
-            border-radius: 10px;
-        }
-        .btn-bulk {
-            background-color: #004d40;
+        /* Specific styling for Wholesale Badge */
+        .badge-bulk {
+            background-color: #00796b; /* Teal for Wholesale */
             color: white;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 5px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .navbar-wholesale {
+            background-color: #004d40; /* Darker Teal for Wholesale Header */
         }
     </style>
 </head>
 <body>
-<div style="background-color: #004d40; color: white; padding: 20px;">
-    <h1>Wholesale Bulk Market</h1>
-    <p>Welcome, <span th:text="${username}">User</span>!</p>
-    <a href="/wholesale/cart" style="color: yellow;">View Bulk Cart 🛒</a> |
-    <a href="/logout" style="color: white;">Logout</a>
-</div>
 
-<div style="padding: 20px;">
-    <div class="bulk-card" th:each="prod : ${products}">
-        <h2 th:text="${prod.name}">Wheat</h2>
-        <p>Bulk Price: <b th:text="'₹' + ${prod.price}">₹20</b> / kg</p>
-        <p>Available Stock: <span th:text="${prod.stock}">500</span> kg</p>
-        <hr>
-        <a th:href="@{/wholesale/add-to-cart/{id}(id=${prod.id})}" class="btn-bulk">Add to Bulk Cart</a>
+<nav class="navbar navbar-wholesale">
+    <div class="logo">
+        <h1><i class="fas fa-warehouse"></i> Wholesale Market</h1>
+    </div>
+    <div class="nav-links">
+        <span>Welcome, <b th:text="${username}">Buyer</b></span>
+        <a href="/wholesale/cart"><i class="fas fa-shopping-cart"></i> Bulk Cart</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div th:if="${param.success}" style="background: #e0f2f1; color: #00695c; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #b2dfdb;">
+        <i class="fas fa-check-circle"></i> Bulk Order placed successfully!
+    </div>
+
+    <h2 style="color: #004d40; margin-bottom: 20px;">Bulk Commodities</h2>
+
+    <div class="grid-container">
+        <div class="product-card" th:each="prod : ${products}">
+            <img src="https://source.unsplash.com/300x200/?grain,sack" alt="Commodity">
+
+            <span class="badge-bulk">Bulk Item</span>
+
+            <h3 th:text="${prod.name}">Wheat</h3>
+            <p style="color: #666;" th:text="${prod.description}">High quality grain</p>
+
+            <span class="price-tag" style="color: #00796b;">₹<span th:text="${prod.price}">20</span> / kg</span>
+
+            <p style="font-size: 0.9em; color: #888;">
+                Available Stock: <b th:text="${prod.stock}">500</b> kg
+            </p>
+
+            <a th:href="@{/wholesale/add-to-cart/{id}(id=${prod.id})}" class="btn" style="background-color: #004d40; color: white;">
+                <i class="fas fa-plus"></i> Add to Bulk Cart
+            </a>
+        </div>
     </div>
 </div>
+
 </body>
 </html>
