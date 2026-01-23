@@ -1,6 +1,6 @@
 package com.harvesthub.app.config;
 
-import com.harvesthub.app.service.CustomUserDetailsService; // We will create this next
+import com.harvesthub.app.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -110,4 +110,16 @@ public class ShopController {
         cartService.clearCart();
         return "redirect:/retail/home?success=OrderPlaced";
     }
+
+    // 5. The "My Orders" History Page
+    @GetMapping("/orders")
+    public String myOrders(Model model, Principal principal) {
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow();
+
+        // Fetch orders for this logged-in user
+        List<Order> myOrders = orderRepository.findByUserId(user.getId());
+
+        model.addAttribute("orders", myOrders);
+        return "retail/my_orders";
+    }
 }

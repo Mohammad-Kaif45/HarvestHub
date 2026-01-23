@@ -1,10 +1,8 @@
 package com.harvesthub.app.model;
 
 import jakarta.persistence.*;
-import lombok.Data; // Removes need for Getters/Setters
-
 @Entity
-@Table(name = "users") // Renaming table to 'users' because 'user' is a reserved keyword in SQL
+@Table(name = "users")
 public class User {
     public Long getId() {
         return id;
