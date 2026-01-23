@@ -1,14 +1,35 @@
 package com.harvesthub.app.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import java.math.BigDecimal; // Import BigDecimal
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
-@Table(name = "orders") // "Order" is a reserved SQL keyword, so we use "orders"
+@Table(name = "orders")
 public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private LocalDateTime orderDate;
+
+    // CHANGED: Double -> BigDecimal
+    @Column(precision = 10, scale = 2)
+    private BigDecimal totalAmount;
+
+    private String status; // e.g., "CONFIRMED"
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderItem> items;
+
+    // --- GETTERS AND SETTERS ---
+
     public Long getId() {
         return id;
     }
@@ -25,11 +46,11 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public Double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -56,21 +77,4 @@ public class Order {
     public void setItems(List<OrderItem> items) {
         this.items = items;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private LocalDateTime orderDate;
-
-    private Double totalAmount;
-
-    private String status; // e.g., "CONFIRMED"
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(cascade = CascadeType.ALL) // If we save Order, it automatically saves Items
-    private List<OrderItem> items;
 }

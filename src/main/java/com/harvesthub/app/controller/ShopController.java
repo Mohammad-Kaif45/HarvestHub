@@ -25,9 +25,8 @@ public class ShopController {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final CartService cartService;
-    private final OrderRepository orderRepository; // Added for Checkout
+    private final OrderRepository orderRepository;
 
-    // Updated Constructor with ALL 4 dependencies
     public ShopController(ProductRepository productRepository,
                           UserRepository userRepository,
                           CartService cartService,
@@ -45,9 +44,7 @@ public class ShopController {
         User currentUser = userRepository.findByEmail(email).orElse(new User());
         model.addAttribute("username", currentUser.getFullName());
 
-        // Fetch ONLY products tagged as 'RETAIL'
         model.addAttribute("products", productRepository.findByListingType("RETAIL"));
-
         return "retail/retail_home";
     }
 
@@ -66,7 +63,7 @@ public class ShopController {
         return "retail/cart_page";
     }
 
-    // 4. The CHECKOUT Logic (New!)
+    // 4. The CHECKOUT Logic
     @GetMapping("/checkout")
     public String checkout(Principal principal) {
         User user = userRepository.findByEmail(principal.getName()).orElseThrow();
@@ -76,7 +73,7 @@ public class ShopController {
         order.setOrderDate(java.time.LocalDateTime.now());
         order.setStatus("CONFIRMED");
         order.setUser(user);
-        order.setTotalAmount(cartService.getTotal());
+        order.setTotalAmount(cartService.getTotal()); // Now accepts BigDecimal
 
         // B. Convert Cart Items to Order Items & Reduce Stock
         List<OrderItem> orderItems = new ArrayList<>();
@@ -98,7 +95,7 @@ public class ShopController {
             OrderItem item = new OrderItem();
             item.setProduct(product);
             item.setQuantity(quantity);
-            item.setPriceAtPurchase(product.getPrice());
+            item.setPriceAtPurchase(product.getPrice()); // Now accepts BigDecimal
             orderItems.add(item);
         }
 
@@ -115,10 +112,7 @@ public class ShopController {
     @GetMapping("/orders")
     public String myOrders(Model model, Principal principal) {
         User user = userRepository.findByEmail(principal.getName()).orElseThrow();
-
-        // Fetch orders for this logged-in user
         List<Order> myOrders = orderRepository.findByUserId(user.getId());
-
         model.addAttribute("orders", myOrders);
         return "retail/my_orders";
     }

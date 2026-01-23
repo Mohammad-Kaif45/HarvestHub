@@ -5,11 +5,12 @@ import com.harvesthub.app.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.math.BigDecimal; // Import BigDecimal
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@SessionScope // This magic annotation keeps the cart alive as long as the user is logged in
+@SessionScope
 public class CartService {
 
     private final ProductRepository productRepository;
@@ -37,10 +38,19 @@ public class CartService {
         return productMap;
     }
 
-    public Double getTotal() {
-        return getProductsInCart().entrySet().stream()
-                .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue())
-                .sum();
+    // UPDATED: Now returns BigDecimal and uses precise math
+    public BigDecimal getTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Map.Entry<Product, Integer> entry : getProductsInCart().entrySet()) {
+            BigDecimal price = entry.getKey().getPrice();
+            BigDecimal quantity = BigDecimal.valueOf(entry.getValue());
+
+            // total = total + (price * quantity)
+            total = total.add(price.multiply(quantity));
+        }
+
+        return total;
     }
 
     public void clearCart() {

@@ -1,11 +1,27 @@
 package com.harvesthub.app.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import java.math.BigDecimal; // Import BigDecimal
 
 @Entity
-@Data
 public class OrderItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    private Integer quantity;
+
+    // CHANGED: Double -> BigDecimal
+    @Column(precision = 10, scale = 2)
+    private BigDecimal priceAtPurchase;
+
+    // --- GETTERS AND SETTERS ---
+
     public Long getId() {
         return id;
     }
@@ -30,23 +46,11 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public Double getPriceAtPurchase() {
+    public BigDecimal getPriceAtPurchase() {
         return priceAtPurchase;
     }
 
-    public void setPriceAtPurchase(Double priceAtPurchase) {
+    public void setPriceAtPurchase(BigDecimal priceAtPurchase) {
         this.priceAtPurchase = priceAtPurchase;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    private Integer quantity;
-
-    private Double priceAtPurchase; // Store price in case it changes later
 }

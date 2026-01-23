@@ -27,53 +27,52 @@ public class WholesaleController {
     private final CartService cartService;
     private final OrderRepository orderRepository;
 
-    public WholesaleController(ProductRepository productRepository, UserRepository userRepository, CartService cartService, OrderRepository orderRepository) {
+    public WholesaleController(ProductRepository productRepository,
+                               UserRepository userRepository,
+                               CartService cartService,
+                               OrderRepository orderRepository) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.cartService = cartService;
         this.orderRepository = orderRepository;
     }
 
-    // 1. Wholesale Home Page (Shows ONLY Wholesale Items)
     @GetMapping("/home")
     public String wholesaleHome(Model model, Principal principal) {
         String email = principal.getName();
-        User user = userRepository.findByEmail(email).orElseThrow();
-        model.addAttribute("username", user.getFullName());
+        User currentUser = userRepository.findByEmail(email).orElse(new User());
+        model.addAttribute("username", currentUser.getFullName());
 
-        // FILTER: Only fetch WHOLESALE items
+        // Fetch ONLY products tagged as 'WHOLESALE'
         model.addAttribute("products", productRepository.findByListingType("WHOLESALE"));
-
         return "wholesale/wholesale_home";
     }
 
-    // 2. Add to Cart (Redirects back to Wholesale Home)
     @GetMapping("/add-to-cart/{id}")
     public String addToCart(@PathVariable Long id) {
         cartService.addToCart(id);
         return "redirect:/wholesale/home";
     }
 
-    // 3. View Wholesale Cart
     @GetMapping("/cart")
     public String viewCart(Model model) {
         model.addAttribute("cartItems", cartService.getProductsInCart());
         model.addAttribute("total", cartService.getTotal());
-        return "wholesale/wholesale_cart"; // We need a separate HTML for this
+        return "wholesale/wholesale_cart";
     }
 
-    // 4. Checkout Logic (Same logic, but redirects to Wholesale Home)
     @GetMapping("/checkout")
     public String checkout(Principal principal) {
         User user = userRepository.findByEmail(principal.getName()).orElseThrow();
 
         Order order = new Order();
         order.setOrderDate(java.time.LocalDateTime.now());
-        order.setStatus("WHOLESALE_CONFIRMED");
+        order.setStatus("CONFIRMED");
         order.setUser(user);
-        order.setTotalAmount(cartService.getTotal());
+        order.setTotalAmount(cartService.getTotal()); // BigDecimal
 
         List<OrderItem> orderItems = new ArrayList<>();
+
         for (var entry : cartService.getProductsInCart().entrySet()) {
             Product product = entry.getKey();
             Integer quantity = entry.getValue();
@@ -81,13 +80,14 @@ public class WholesaleController {
             if (product.getStock() < quantity) {
                 return "redirect:/wholesale/cart?error=NotEnoughStock";
             }
+
             product.setStock(product.getStock() - quantity);
             productRepository.save(product);
 
             OrderItem item = new OrderItem();
             item.setProduct(product);
             item.setQuantity(quantity);
-            item.setPriceAtPurchase(product.getPrice());
+            item.setPriceAtPurchase(product.getPrice()); // BigDecimal
             orderItems.add(item);
         }
 
@@ -95,6 +95,6 @@ public class WholesaleController {
         orderRepository.save(order);
         cartService.clearCart();
 
-        return "redirect:/wholesale/home?success=BulkOrderPlaced";
+        return "redirect:/wholesale/home?success=OrderPlaced";
     }
 }

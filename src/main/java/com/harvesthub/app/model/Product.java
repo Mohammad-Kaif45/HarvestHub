@@ -1,12 +1,38 @@
 package com.harvesthub.app.model;
 
 import jakarta.persistence.*;
-import lombok.Data; // Or generate Getters/Setters manually like you did for User
+import java.math.BigDecimal;
 
 @Entity
-@Data
 @Table(name = "products")
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    private String description;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price; // Changed to BigDecimal to fix math errors
+
+    @Column(nullable = false)
+    private Integer stock;
+
+    @Column(nullable = false)
+    private String listingType; // "RETAIL" or "WHOLESALE"
+
+    private String imageUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "farmer_id", nullable = false)
+    private User farmer;
+
+    // --- GETTERS AND SETTERS ---
+
     public Long getId() {
         return id;
     }
@@ -31,11 +57,11 @@ public class Product {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -70,29 +96,4 @@ public class Product {
     public void setFarmer(User farmer) {
         this.farmer = farmer;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String name;        // e.g., "Potato (Agra)"
-
-    private String description; // e.g., "Fresh organic potatoes"
-
-    @Column(nullable = false)
-    private Double price;       // e.g., 40.0
-
-    @Column(nullable = false)
-    private Integer stock;      // e.g., 500 (kg)
-
-    @Column(nullable = false)
-    private String listingType; // Values: "RETAIL" or "WHOLESALE"
-
-    private String imageUrl;    // We will just store the filename for now
-
-    // We link this product to the Farmer who added it
-    @ManyToOne
-    @JoinColumn(name = "farmer_id", nullable = false)
-    private User farmer;
 }
