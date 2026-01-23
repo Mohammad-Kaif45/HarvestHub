@@ -21,8 +21,8 @@ public class LoginController {
     // }
     // -----------------------
 
-    @GetMapping("/wholesale/home")
-    public String showWholesaleHome() {
-        return "wholesale/wholesale_home";
-    }
+//    @GetMapping("/wholesale/home")
+//    public String showWholesaleHome() {
+//        return "wholesale/wholesale_home";
+//    }
 }
