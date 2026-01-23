@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bulk Cart</title>
+</head>
+<body>
+<h1>Your Bulk Cart</h1>
+<ul>
+    <li th:each="entry : ${cartItems}">
+        <span th:text="${entry.key.name}">Wheat</span> -
+        Qty: <span th:text="${entry.value}">10</span>
+    </li>
+</ul>
+<h3>Total: ₹<span th:text="${total}">100</span></h3>
+
+<a href="/wholesale/checkout">Confirm Bulk Order</a>
+</body>
+</html>

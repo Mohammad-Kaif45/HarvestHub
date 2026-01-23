@@ -1,3 +1,43 @@
-<h1>Wholesale Market</h1>
-<p>Buy in bulk here.</p>
-<a href="/logout">Logout</a>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Wholesale Market</title>
+    <style>
+        .bulk-card {
+            border: 2px solid #004d40;
+            background-color: #e0f2f1; /* Light Teal for Wholesale */
+            padding: 20px;
+            margin: 10px;
+            display: inline-block;
+            width: 250px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .btn-bulk {
+            background-color: #004d40;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div style="background-color: #004d40; color: white; padding: 20px;">
+    <h1>Wholesale Bulk Market</h1>
+    <p>Welcome, <span th:text="${username}">User</span>!</p>
+    <a href="/wholesale/cart" style="color: yellow;">View Bulk Cart 🛒</a> |
+    <a href="/logout" style="color: white;">Logout</a>
+</div>
+
+<div style="padding: 20px;">
+    <div class="bulk-card" th:each="prod : ${products}">
+        <h2 th:text="${prod.name}">Wheat</h2>
+        <p>Bulk Price: <b th:text="'₹' + ${prod.price}">₹20</b> / kg</p>
+        <p>Available Stock: <span th:text="${prod.stock}">500</span> kg</p>
+        <hr>
+        <a th:href="@{/wholesale/add-to-cart/{id}(id=${prod.id})}" class="btn-bulk">Add to Bulk Cart</a>
+    </div>
+</div>
+</body>
+</html>
