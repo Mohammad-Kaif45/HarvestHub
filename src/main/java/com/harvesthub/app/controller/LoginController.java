@@ -11,7 +11,7 @@ public class LoginController {
         return "login";
     }
 
-    // --- ALREADY DELETED ---
+
     // @GetMapping("/farmer/dashboard") ...
 
     // --- DELETE THIS NOW ---

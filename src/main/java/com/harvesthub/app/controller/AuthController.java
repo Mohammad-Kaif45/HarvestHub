@@ -2,7 +2,7 @@ package com.harvesthub.app.controller;
 
 import com.harvesthub.app.model.User;
 import com.harvesthub.app.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder; // Import this
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AuthController {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder; // 1. Add this field
+    private final PasswordEncoder passwordEncoder;
 
     // 2. Update Constructor to inject PasswordEncoder
     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {

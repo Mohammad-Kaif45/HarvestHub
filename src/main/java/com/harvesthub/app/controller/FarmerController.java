@@ -2,10 +2,10 @@ package com.harvesthub.app.controller;
 
 import com.harvesthub.app.model.Product;
 import com.harvesthub.app.model.User;
-import com.harvesthub.app.model.Order; // Import Order
+import com.harvesthub.app.model.Order;
 import com.harvesthub.app.repository.ProductRepository;
 import com.harvesthub.app.repository.UserRepository;
-import com.harvesthub.app.repository.OrderRepository; // Import OrderRepository
+import com.harvesthub.app.repository.OrderRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
