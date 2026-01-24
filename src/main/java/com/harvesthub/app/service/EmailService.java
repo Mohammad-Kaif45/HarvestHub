@@ -14,17 +14,22 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     @Async
-    public void sendOtpEmail(String toEmail, String otp) {
-        SimpleMailMessage message = new SimpleMailMessage();
+    public void sendOtpEmail(String to, String otp) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("your-email@gmail.com"); // Make sure this matches the Username
+            message.setTo(to);
+            message.setSubject("Your OTP Code");
+            message.setText("Your verification code is: " + otp);
 
-        message.setFrom("kaifmumtajansari@gmail.com");
-        message.setTo(toEmail);
-        message.setSubject("Verify Your HarvestHub Account");
-        message.setText("Welcome to HarvestHub! \n\n" +
-                "Your verification code is: " + otp + "\n\n" +
-                "Please enter this code on the website to complete your registration.");
+            mailSender.send(message);
+            System.out.println("Email sent successfully to " + to);
 
-        mailSender.send(message);
-        System.out.println("OTP Email sent successfully to " + toEmail);
+        } catch (Exception e) {
+            // THIS is what will show us the real error in Render logs
+            System.err.println("!!! EMAIL FAILURE !!!");
+            System.err.println("Error Message: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
