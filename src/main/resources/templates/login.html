@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Special Full-Screen Background for Login */
         body {
             background: linear-gradient(135deg, var(--primary-blue), var(--accent-green));
             height: 100vh;
@@ -29,7 +28,7 @@
             padding: 12px 15px;
             margin-bottom: 20px;
             border: 1px solid #ddd;
-            border-radius: 25px; /* Rounded Inputs */
+            border-radius: 25px;
             box-sizing: border-box;
             background: #f9f9f9;
             transition: 0.3s;
@@ -67,7 +66,21 @@
 
     <form action="/login" method="post">
         <input type="text" name="username" class="form-control" placeholder="Email Address" required>
-        <input type="password" name="password" class="form-control" placeholder="Password" required>
+
+        <div style="position: relative; width: 100%; margin-bottom: 20px;">
+            <input type="password"
+                   id="loginPassword"
+                   name="password"
+                   class="form-control"
+                   placeholder="Password"
+                   required
+                   style="margin-bottom: 0; padding-right: 40px;">
+
+            <span onclick="showTemporarily('loginPassword')"
+                  style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #666;">
+                <i class="fas fa-eye"></i>
+            </span>
+        </div>
 
         <button type="submit" class="btn btn-primary btn-login">
             Login <i class="fas fa-sign-in-alt"></i>
@@ -81,6 +94,20 @@
         Create a New Account
     </a>
 </div>
+
+<script>
+    function showTemporarily(fieldId) {
+        const input = document.getElementById(fieldId);
+
+        // 1. Show Password
+        input.type = "text";
+
+        // 2. Hide automatically after 5 seconds (5000ms)
+        setTimeout(function() {
+            input.type = "password";
+        }, 5000);
+    }
+</script>
 
 </body>
 </html>
