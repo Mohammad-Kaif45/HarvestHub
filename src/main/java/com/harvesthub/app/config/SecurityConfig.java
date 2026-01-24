@@ -1,13 +1,12 @@
 package com.harvesthub.app.config;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.harvesthub.app.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -21,22 +20,20 @@ public class SecurityConfig {
         this.customUserDetailsService = customUserDetailsService;
     }
 
-
-
-
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Use Strong Hashing
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. DISABLE CSRF (This fixes the "refresh" issue)
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/register", "/register/save", "/style.css", "/css/**", "/images/**").permitAll()
+                        // 🟢 FIX IS HERE: Added "/verify-otp"
+                        .requestMatchers("/", "/login", "/register", "/register/save", "/verify-otp", "/style.css", "/css/**", "/images/**").permitAll()
+
                         .requestMatchers("/farmer/**").hasRole("FARMER")
                         .requestMatchers("/retail/**").hasRole("RETAIL")
                         .requestMatchers("/wholesale/**").hasRole("WHOLESALE")
@@ -44,7 +41,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .loginProcessingUrl("/login") // Explicitly tell Spring where to submit the form
+                        .loginProcessingUrl("/login")
                         .successHandler(customSuccessHandler())
                         .permitAll()
                 )
