@@ -5,6 +5,9 @@
     <title>Login - HarvestHub</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             background: linear-gradient(135deg, var(--primary-blue), var(--accent-green));
@@ -56,10 +59,6 @@
     </h2>
     <p style="color: #666; margin-bottom: 30px;">Welcome back! Please login.</p>
 
-    <div th:if="${param.success}" style="background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 20px; font-size: 0.9em;">
-        <i class="fas fa-check-circle"></i> Registration successful! Please login.
-    </div>
-
     <div th:if="${param.error}" style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 20px; font-size: 0.9em;">
         <i class="fas fa-exclamation-triangle"></i> Invalid Email or Password.
     </div>
@@ -96,16 +95,30 @@
 </div>
 
 <script>
+    // Password Toggle Function
     function showTemporarily(fieldId) {
         const input = document.getElementById(fieldId);
-
-        // 1. Show Password
         input.type = "text";
-
-        // 2. Hide automatically after 5 seconds (5000ms)
         setTimeout(function() {
             input.type = "password";
         }, 5000);
+    }
+
+    // Check URL for "verified=true"
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('verified')) {
+        Swal.fire({
+            title: 'Verification Successful!',
+            text: 'Your OTP has been verified. You can now login.',
+            icon: 'success',
+            confirmButtonText: 'Login Now',
+            confirmButtonColor: '#28a745', // Green color
+            timer: 6000,
+            timerProgressBar: true
+        }).then(() => {
+            // Optional: Clean URL so popup doesn't show on refresh
+            window.history.replaceState(null, null, window.location.pathname);
+        });
     }
 </script>
 

@@ -25,11 +25,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (!user.isVerified()) {
             throw new DisabledException("User is not verified. Please verify OTP first.");
         }
-        // Convert our "User" to Spring's "UserDetails"
+
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
-                .password(user.getPassword()) // Pass the {noop}1234
-                .roles(user.getRole())        // Sets role as ROLE_FARMER, etc.
+                .password(user.getPassword())
+                // --- THE FIX IS HERE ---
+                // Old (Broken): .roles(user.getRole())
+                // New (Fixed):  .authorities(user.getRole())
+                .authorities(user.getRole())
                 .build();
     }
 }

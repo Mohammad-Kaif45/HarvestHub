@@ -42,6 +42,20 @@
             box-sizing: border-box;
             background: #f9f9f9;
         }
+        /* New Style for Error Message */
+        .alert-error {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #b91c1c;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -51,6 +65,11 @@
         <i class="fas fa-seedling"></i> Join HarvestHub
     </h2>
     <p style="color: #666; margin-bottom: 25px;">Create your account today.</p>
+
+    <div th:if="${error}" class="alert-error">
+        <i class="fas fa-exclamation-circle"></i>
+        <span th:text="${error}"></span>
+    </div>
 
     <form th:action="@{/register/save}" th:object="${user}" method="post">
 
@@ -104,11 +123,7 @@
 <script>
     function showTemporarily(fieldId) {
         const input = document.getElementById(fieldId);
-
-        // 1. Show Password
         input.type = "text";
-
-        // 2. Hide automatically after 5 seconds (5000ms)
         setTimeout(function() {
             input.type = "password";
         }, 5000);
