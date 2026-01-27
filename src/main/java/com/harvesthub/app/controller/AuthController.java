@@ -47,6 +47,12 @@ public class AuthController {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
+        // --- FIX: Add "ROLE_" Prefix for Spring Security ---
+        // If the form sends "FARMER", this changes it to "ROLE_FARMER"
+        if (user.getRole() != null && !user.getRole().startsWith("ROLE_")) {
+            user.setRole("ROLE_" + user.getRole());
+        }
+
         // C. Generate 6-Digit OTP
         String randomOtp = String.format("%06d", new Random().nextInt(999999));
         user.setOtp(randomOtp);
@@ -56,7 +62,15 @@ public class AuthController {
         userRepository.save(user);
 
         // E. Send Email
-        emailService.sendOtpEmail(user.getEmail(), randomOtp);
+        // If this fails, the user is saved but won't get the OTP.
+        // We will fix the timeout in Step 2 below.
+        try {
+            emailService.sendOtpEmail(user.getEmail(), randomOtp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Optional: You could delete the user here if email fails,
+            // so they can try registering again.
+        }
 
         // F. Store email in session temporarily
         session.setAttribute("temp_email", user.getEmail());
