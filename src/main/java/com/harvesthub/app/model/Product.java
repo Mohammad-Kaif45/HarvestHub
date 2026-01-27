@@ -2,6 +2,8 @@ package com.harvesthub.app.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 
 @Entity
 @Table(name = "products")
@@ -95,5 +97,18 @@ public class Product {
 
     public void setFarmer(User farmer) {
         this.farmer = farmer;
+    }
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT") // Allows storing large image strings
+    private String imageBase64;
+
+    // --- Add Getter and Setter ---
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
 }

@@ -6,18 +6,24 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Specific styling for Wholesale Badge */
         .badge-bulk {
-            background-color: #00796b; /* Teal for Wholesale */
+            position: absolute; /* Fix position over image */
+            top: 10px;
+            right: 10px;
+            background-color: #00796b;
             color: white;
             padding: 5px 10px;
             border-radius: 4px;
             font-size: 0.8em;
             text-transform: uppercase;
             font-weight: bold;
+            z-index: 10;
         }
         .navbar-wholesale {
-            background-color: #004d40; /* Darker Teal for Wholesale Header */
+            background-color: #004d40;
+        }
+        .product-card {
+            position: relative; /* Needed for badge positioning */
         }
     </style>
 </head>
@@ -44,22 +50,34 @@
 
     <div class="grid-container">
         <div class="product-card" th:each="prod : ${products}">
-            <img src="https://source.unsplash.com/300x200/?grain,sack" alt="Commodity">
 
             <span class="badge-bulk">Bulk Item</span>
 
-            <h3 th:text="${prod.name}">Wheat</h3>
-            <p style="color: #666;" th:text="${prod.description}">High quality grain</p>
+            <div style="height: 200px; overflow: hidden; border-radius: 10px 10px 0 0; background: #f0f0f0;">
+                <img th:if="${prod.imageBase64 != null}"
+                     th:src="'data:image/jpeg;base64,' + ${prod.imageBase64}"
+                     style="width: 100%; height: 100%; object-fit: cover;">
 
-            <span class="price-tag" style="color: #00796b;">₹<span th:text="${prod.price}">20</span> / kg</span>
+                <div th:unless="${prod.imageBase64 != null}"
+                     style="display: flex; align-items: center; justify-content: center; height: 100%; color: #aaa;">
+                    <i class="fas fa-box-open fa-3x"></i>
+                </div>
+            </div>
 
-            <p style="font-size: 0.9em; color: #888;">
-                Available Stock: <b th:text="${prod.stock}">500</b> kg
-            </p>
+            <div style="padding: 15px;">
+                <h3 th:text="${prod.name}">Wheat</h3>
+                <p style="color: #666;" th:text="${prod.description}">High quality grain</p>
 
-            <a th:href="@{/wholesale/add-to-cart/{id}(id=${prod.id})}" class="btn" style="background-color: #004d40; color: white;">
-                <i class="fas fa-plus"></i> Add to Bulk Cart
-            </a>
+                <span class="price-tag" style="color: #00796b;">₹<span th:text="${prod.price}">20</span> / kg</span>
+
+                <p style="font-size: 0.9em; color: #888; margin-top: 5px;">
+                    Available Stock: <b th:text="${prod.stock}">500</b> kg
+                </p>
+
+                <a th:href="@{/wholesale/add-to-cart/{id}(id=${prod.id})}" class="btn" style="background-color: #004d40; color: white; width: 100%; margin-top: 10px;">
+                    <i class="fas fa-plus"></i> Add to Bulk Cart
+                </a>
+            </div>
         </div>
     </div>
 </div>

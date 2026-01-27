@@ -9,7 +9,9 @@ import com.harvesthub.app.repository.OrderRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.util.Base64;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -48,15 +50,28 @@ public class FarmerController {
 
     // 3. SAVE THE CROP (This was missing!)
     @PostMapping("/save")
-    public String saveProduct(@ModelAttribute Product product, Principal principal) {
-        // Find the currently logged-in farmer
-        User farmer = userRepository.findByEmail(principal.getName()).orElseThrow();
+    public String saveProduct(@ModelAttribute Product product,
+                              @RequestParam("imageFile") MultipartFile file,
+                              Principal principal) {
 
-        // Link the product to this farmer
-        product.setFarmer(farmer);
+        try {
+            // 1. Link Farmer
+            User farmer = userRepository.findByEmail(principal.getName()).orElseThrow();
+            product.setFarmer(farmer);
 
-        // Save to Database
-        productRepository.save(product);
+            // 2. Process Image Upload
+            if (!file.isEmpty()) {
+                // Convert the uploaded file to a Base64 String
+                String base64Image = Base64.getEncoder().encodeToString(file.getBytes());
+                product.setImageBase64(base64Image);
+            }
+
+            // 3. Save to Database
+            productRepository.save(product);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return "redirect:/farmer/dashboard";
     }

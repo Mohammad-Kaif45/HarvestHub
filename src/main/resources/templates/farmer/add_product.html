@@ -6,14 +6,13 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Small tweak to make the form look like a card */
         .form-card {
             background: white;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             max-width: 600px;
-            margin: 0 auto; /* Center it */
+            margin: 0 auto;
         }
         .form-group {
             margin-bottom: 20px;
@@ -54,11 +53,16 @@
     <h2 style="text-align: center; color: var(--primary-blue); margin-bottom: 25px;">Add a New Crop</h2>
 
     <div class="form-card">
-        <form action="/farmer/save" method="post" th:object="${product}">
+        <form action="/farmer/save" method="post" th:object="${product}" enctype="multipart/form-data">
 
             <div class="form-group">
                 <label>Crop Name</label>
                 <input type="text" th:field="*{name}" class="form-control" placeholder="e.g. Potato, Wheat" required>
+            </div>
+
+            <div class="form-group">
+                <label>Crop Image</label>
+                <input type="file" name="imageFile" class="form-control" accept="image/*" required>
             </div>
 
             <div class="form-group">

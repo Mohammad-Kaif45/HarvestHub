@@ -25,20 +25,32 @@
 
     <div class="grid-container">
         <div class="product-card" th:each="prod : ${products}">
-            <img src="https://source.unsplash.com/300x200/?vegetable,farm" alt="Veggie">
 
-            <h3 th:text="${prod.name}">Tomato</h3>
-            <p style="color: #666;" th:text="${prod.description}">Fresh and organic</p>
+            <div style="height: 200px; overflow: hidden; border-radius: 10px 10px 0 0; background: #f9f9f9;">
+                <img th:if="${prod.imageBase64 != null}"
+                     th:src="'data:image/jpeg;base64,' + ${prod.imageBase64}"
+                     style="width: 100%; height: 100%; object-fit: cover;">
 
-            <span class="price-tag" th:text="'₹' + ${prod.price} + ' / kg'">₹40 / kg</span>
+                <div th:unless="${prod.imageBase64 != null}"
+                     style="display: flex; align-items: center; justify-content: center; height: 100%; color: #aaa;">
+                    <i class="fas fa-carrot fa-3x"></i>
+                </div>
+            </div>
 
-            <p style="font-size: 0.9em; color: #888;">
-                Stock: <span th:text="${prod.stock}">50</span> kg
-            </p>
+            <div style="padding: 15px;">
+                <h3 th:text="${prod.name}">Tomato</h3>
+                <p style="color: #666;" th:text="${prod.description}">Fresh and organic</p>
 
-            <a th:href="@{/retail/add-to-cart/{id}(id=${prod.id})}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add to Cart
-            </a>
+                <span class="price-tag" th:text="'₹' + ${prod.price} + ' / kg'">₹40 / kg</span>
+
+                <p style="font-size: 0.9em; color: #888; margin-top: 5px;">
+                    Stock: <span th:text="${prod.stock}">50</span> kg
+                </p>
+
+                <a th:href="@{/retail/add-to-cart/{id}(id=${prod.id})}" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <i class="fas fa-plus"></i> Add to Cart
+                </a>
+            </div>
         </div>
     </div>
 </div>

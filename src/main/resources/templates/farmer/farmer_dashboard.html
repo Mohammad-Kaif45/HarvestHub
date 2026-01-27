@@ -32,7 +32,7 @@
     <table class="styled-table">
         <thead>
         <tr>
-            <th>Crop Name</th>
+            <th>Image</th> <th>Crop Name</th>
             <th>Price (₹)</th>
             <th>Stock (kg)</th>
             <th>Type</th>
@@ -41,6 +41,14 @@
         </thead>
         <tbody>
         <tr th:each="product : ${products}">
+
+            <td>
+                <img th:if="${product.imageBase64 != null}"
+                     th:src="'data:image/jpeg;base64,' + ${product.imageBase64}"
+                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px; border: 1px solid #ddd;">
+                <span th:unless="${product.imageBase64 != null}" style="color: #999; font-size: 0.8em;">No Image</span>
+            </td>
+
             <td th:text="${product.name}">Tomato</td>
             <td th:text="${product.price}">40.0</td>
             <td th:text="${product.stock}">100</td>
