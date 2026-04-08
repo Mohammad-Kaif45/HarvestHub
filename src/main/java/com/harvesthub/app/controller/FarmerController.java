@@ -1,6 +1,6 @@
 package com.harvesthub.app.controller;
 
-import com.harvesthub.app.model.Product;
+import com.harvesthub.app.model.Product; 
 import com.harvesthub.app.model.User;
 import com.harvesthub.app.model.Order;
 import com.harvesthub.app.repository.ProductRepository;
